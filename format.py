@@ -13,7 +13,7 @@ def openWorkbook():
     print("Reading rows...")
     for row in range(5, sheet.max_row + 1):
         message = sheet['C' + str(row)].value
-        workbookData += [message]
+        workbookData.append(message)
 
     print("Here is your data for " + str(userID))
     print(workbookData)
