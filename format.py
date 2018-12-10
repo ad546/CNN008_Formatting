@@ -2,32 +2,33 @@
 import openpyxl
 import os
 
-stringMatchers = ["started", "Survey"]
-
-def openWorkbook():
-    wbName = '23630_ROTATION'
-    #input("What is the name of your workbook?")
-    wb = openpyxl.load_workbook(wbName + '.xlsx')
-    sheet = wb.get_sheet_by_name(wbName)
-    return sheet
-
-def readFiles(sheet):
+def runScript():
+    stringMatchers = ['started', 'Survey', 'selected']
+    forbiddenWords = ['test_ads', 'selected undefined']
     workbookData = []
+    #Open Workbook
+    wbName = '23630_ROTATION'
+    wb = openpyxl.load_workbook(wbName + '.xlsx')
+    sheet = wb[wbName]
     userID = sheet['B3'].value
+    
+    #Read data from workbook
     print("Reading rows...")
     for row in range(5, sheet.max_row + 1):
         message = sheet['C' + str(row)].value
-        if any(x in message for x in stringMatchers):
-            workbookData.append(message)
-    return workbookData, userID
+        if not any(y in message for y in forbiddenWords):
+            if any(x in message for x in stringMatchers):
+                workbookData.append(message)
 
-def printData(workbookData, userID):
-    print("Here is your data for " + str(userID))
-    print(workbookData)
+    #Save data in workbook
+    wb2 = openpyxl.load_workbook('testResults.xlsx')
+    sheet2 = wb2['Survey Results']
+    for index, data in enumerate(workbookData, start=1):
+        sheet2['A' + str(index)] = userID
+        sheet2['B' + str(index)] = data
 
-def main():
-    workingSheet = openWorkbook()
-    workbookData, userID = readFiles(workingSheet)
-    printData(workbookData, userID)
+    wb2.save('testResults.xlsx')
+    print("DONE!")
 
-main()
+runScript()
+
