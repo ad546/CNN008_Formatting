@@ -2,6 +2,8 @@
 #Script will work with PC files
 #Something is wrong with how the log files are saved. Have to open in excel and save as csv
 #Todo: group results based on stories / further clean selected, started / fix null byte issue
+#Testing 
+
 import openpyxl
 import os
 import csv
