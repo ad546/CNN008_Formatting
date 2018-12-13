@@ -1,53 +1,37 @@
 #This program is to format
 #Script will work with PC files
+#Something is wrong with how the log files are saved. Have to open in excel and save as csv
 import openpyxl
 import os
+import csv
+import glob
 
-'''def loopFiles():
-    dirs = os.listdir('./')
-    for dir in dirs:
-        if dir.endswith(".xlsx"):
-            if dir != 'testResults.xlsx':
-                print("Running")
-                runScript(dir)'''
+def loopFiles():
+    path = "./*.csv"
+    line = 0
+    for fname in glob.glob(path):
+        line += 1
+        print(line)
+        runScript(fname)
 
-def runScript():
+def runScript(fname):
+    cleanData = []
     stringMatchers = ['started', 'Survey', 'selected']
     forbiddenWords = ['test_ads', 'selected undefined']
-    workbookData = []
-    wbName = 'combine.xlsx'
-    wb = openpyxl.load_workbook(wbName)
-    sheet = wb.active
-    platform = sheet['B2'].value
-    userID = sheet['B3'].value
-    
-    #Read data from workbook
-    print("Reading rows...")
-    for row in range(5, sheet.max_row + 1):
-        if sheet['A' + str(row)].value == 'Member ID':
-            userID = sheet['B' + str(row)].value
+    with open(fname, newline='') as csv_file:
+        dataArray = list(csv.reader(csv_file))
 
-        if sheet['C' + str(row)].value == None:
-            message = "blank"
-        else:
-            message = sheet['C' + str(row)].value
+    for i in range(len(dataArray)):
+        if not any(y in dataArray[i][2] for y in forbiddenWords):
+            if any(x in dataArray[i][2] for x in stringMatchers):
+                terribleList = []
+                terribleList.append(dataArray[i][1])
+                terribleList.append(dataArray[i][2])
+                cleanData.append(terribleList)
 
-        if not any(y in message for y in forbiddenWords):
-            if any(x in message for x in stringMatchers):
-                workbookData.append(message)
-                #need to link messages to ID
-    #Save data in workbook
-    wb2 = openpyxl.load_workbook('testResults.xlsx')
-    sheet2 = wb2['Survey Results']
-    row_count = sheet2.max_row
-    print(row_count)
-    for index, data in enumerate(workbookData, start=1):
-        sheet2['A' + str(index+row_count)] = platform
-        sheet2['B' + str(index+row_count)] = userID
-        sheet2['C' + str(index+row_count)] = data
+    for data in cleanData:
+        print(data)
+        print('\n')
 
-    wb2.save('testResults.xlsx')
-    print('DONE!')
-
-runScript()
+loopFiles()
 
