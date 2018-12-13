@@ -8,9 +8,12 @@ import openpyxl
 import os
 import csv
 import glob
+import codecs
 
 def loopFiles():
-    path = "./*.csv"
+    # dirname = os.path.dirname(__file__)
+    # print(dirname)
+    path = "../CNN008_Files/*.csv"
     for fname in glob.glob(path):
         runScript(fname)
 
@@ -19,9 +22,9 @@ def runScript(fname):
     stringMatchers = ['started', 'Survey', 'selected']
     forbiddenWords = ['test_ads', 'selected undefined']
     print(fname)
-    if fname != '.\Book1.csv':
+    if fname != '../CNN008_Files\Book1.csv':
         with open(fname, newline='') as csv_file:
-            dataArray = list(csv.reader(csv_file))
+            dataArray = list(csv.reader(csv_file)) 
 
         for i in range(len(dataArray)):
             if not any(y in dataArray[i][2] for y in forbiddenWords):
@@ -35,7 +38,7 @@ def runScript(fname):
 
 def writetoFile(datatoWrite):
     #Book1
-    with open('Book1.csv', 'a') as f:
+    with open('../CNN008_Files/Book1.csv', 'a') as f:
         writer = csv.writer(f, delimiter = ',', lineterminator='\n')
         for value in datatoWrite:
             print(value)
