@@ -1,30 +1,34 @@
 #This program is to format
 #Script will work with PC files
 #Something is wrong with how the log files are saved. Have to open in excel and save as csv
-#Todo: group results based on stories / further clean selected, started / fix null byte issue
-#Testing 
+#Todo: group results based on stories / further clean selected, started
+#Have to combine PC log files and delete Col D "copy *.csv combine.csv" or whatever name
 
-import openpyxl
+import pandas #remember to use 'Anaconda Prompt' to run program and not Windows command
 import os
 import csv
 import glob
 import codecs
 
+def cleanFiles(fname):
+    fileData = pandas.read_csv(fname)
+    fileData = fileData.fillna(" ")
+    fileData.to_csv(r'C:\\Users\\adaspit\\Desktop\\Programming\\Automation\\CNN008_Files\\fixed.csv', index=False)
+
 def loopFiles():
-    # dirname = os.path.dirname(__file__)
-    # print(dirname)
     path = "../CNN008_Files/*.csv"
     for fname in glob.glob(path):
         runScript(fname)
 
 def runScript(fname):
     cleanData = []
-    stringMatchers = ['started', 'Survey', 'selected']
+    stringMatchers = ['started', 'Survey', 'survey', 'selected']
     forbiddenWords = ['test_ads', 'selected undefined']
     print(fname)
     if fname != '../CNN008_Files\Book1.csv':
+        cleanFiles(fname)
         with open(fname, newline='') as csv_file:
-            dataArray = list(csv.reader(csv_file)) 
+            dataArray = list(csv.reader(csv_file))
 
         for i in range(len(dataArray)):
             if not any(y in dataArray[i][2] for y in forbiddenWords):
