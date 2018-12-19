@@ -1,23 +1,33 @@
 #This program is to format
 #Script will work with PC files
 #Something is wrong with how the log files are saved. Have to open in excel and save as csv
-#Todo: group results based on stories / further clean selected, started / fix null byte issue
-import openpyxl
+#Todo: group results based on stories / further clean selected, started
+#Have to combine PC log files and delete Col D "copy *.csv combine.csv" or whatever name
+
+import pandas #remember to use 'Anaconda Prompt' to run program and not Windows command
 import os
 import csv
 import glob
+import codecs
+
+def cleanFiles(fname):
+    username = input("Please enter your username: ")
+    fileData = pandas.read_csv(fname)
+    fileData = fileData.fillna(" ")
+    fileData.to_csv(r'C:\\Users\\' + username + '\\Desktop\\Programming\\Automation\\CNN008_Files\\fixed.csv', index=False)
 
 def loopFiles():
-    path = "./*.csv"
+    path = "../CNN008_Files/*.csv"
     for fname in glob.glob(path):
         runScript(fname)
 
 def runScript(fname):
     cleanData = []
-    stringMatchers = ['started', 'Survey', 'selected']
+    stringMatchers = ['started', 'Survey', 'survey', 'selected']
     forbiddenWords = ['test_ads', 'selected undefined']
     print(fname)
-    if fname != '.\Book1.csv':
+    if fname != '../CNN008_Files\Book1.csv':
+        cleanFiles(fname)
         with open(fname, newline='') as csv_file:
             dataArray = list(csv.reader(csv_file))
 
@@ -33,7 +43,7 @@ def runScript(fname):
 
 def writetoFile(datatoWrite):
     #Book1
-    with open('Book1.csv', 'a') as f:
+    with open('../CNN008_Files/Book1.csv', 'a') as f:
         writer = csv.writer(f, delimiter = ',', lineterminator='\n')
         for value in datatoWrite:
             print(value)
