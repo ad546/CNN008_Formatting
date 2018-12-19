@@ -11,9 +11,10 @@ import glob
 import codecs
 
 def cleanFiles(fname):
+    username = input("Please enter your username: ")
     fileData = pandas.read_csv(fname)
     fileData = fileData.fillna(" ")
-    fileData.to_csv(r'C:\\Users\\adaspit\\Desktop\\Programming\\Automation\\CNN008_Files\\fixed.csv', index=False)
+    fileData.to_csv(r'C:\\Users\\' + username + '\\Desktop\\Programming\\Automation\\CNN008_Files\\fixed.csv', index=False)
 
 def loopFiles():
     path = "../CNN008_Files/*.csv"
