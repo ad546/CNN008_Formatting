@@ -10,24 +10,64 @@ import csv
 import glob
 import codecs
 
-def cleanFiles(fname):
-    username = input("Please enter your username: ")
+def cleanFiles(fname, username):
     fileData = pandas.read_csv(fname)
     fileData = fileData.fillna(" ")
     fileData.to_csv(r'C:\\Users\\' + username + '\\Desktop\\Programming\\Automation\\CNN008_Files\\fixed.csv', index=False)
 
-def loopFiles():
+def loopFiles(username, condition):
     path = "../CNN008_Files/*.csv"
     for fname in glob.glob(path):
-        runScript(fname)
+        if condition == 'desktop':
+            runScriptDesktop(fname, username)
 
-def runScript(fname):
+def runScriptDesktop(fname, username):
     cleanData = []
     stringMatchers = ['started', 'Survey', 'survey', 'selected']
     forbiddenWords = ['test_ads', 'selected undefined']
     print(fname)
     if fname != '../CNN008_Files\Book1.csv':
-        cleanFiles(fname)
+        cleanFiles(fname, username)
+        with open(fname, newline='') as csv_file:
+            dataArray = list(csv.reader(csv_file))
+
+        for i in range(len(dataArray)):
+            if not any(y in dataArray[i][2] for y in forbiddenWords):
+                if any(x in dataArray[i][2] for x in stringMatchers):
+                    terribleList = []
+                    terribleList.append(dataArray[i][1])
+                    terribleList.append(dataArray[i][2])
+                    cleanData.append(terribleList)
+
+        writetoFile(cleanData)
+
+def runScriptMobile(fname, username):
+    cleanData = []
+    stringMatchers = ['started', 'Survey', 'survey', 'selected']
+    forbiddenWords = ['test_ads', 'selected undefined']
+    print(fname)
+    if fname != '../CNN008_Files\Book1.csv':
+        cleanFiles(fname, username)
+        with open(fname, newline='') as csv_file:
+            dataArray = list(csv.reader(csv_file))
+
+        for i in range(len(dataArray)):
+            if not any(y in dataArray[i][2] for y in forbiddenWords):
+                if any(x in dataArray[i][2] for x in stringMatchers):
+                    terribleList = []
+                    terribleList.append(dataArray[i][1])
+                    terribleList.append(dataArray[i][2])
+                    cleanData.append(terribleList)
+
+        writetoFile(cleanData)
+
+def runScriptTV(fname, username):
+    cleanData = []
+    stringMatchers = ['started', 'Survey', 'survey', 'selected']
+    forbiddenWords = ['test_ads', 'selected undefined']
+    print(fname)
+    if fname != '../CNN008_Files\Book1.csv':
+        cleanFiles(fname, username)
         with open(fname, newline='') as csv_file:
             dataArray = list(csv.reader(csv_file))
 
@@ -50,6 +90,9 @@ def writetoFile(datatoWrite):
             writer.writerow(value)
 
 def main():
-    loopFiles()
+    username = input("Please enter your username: ")
+    condition = input("Please enter the condition: ")
+    if condition == 'desktop':
+        loopFiles(username, condition)
 
 main()
