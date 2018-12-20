@@ -69,7 +69,8 @@ def runScriptMobile(fname, username): #need to adjust dataArray indexes
 
 def runScriptTV(fname, username):
     cleanData = []
-    stringMatchers = ['Playing Entertainment', 'Playing Political', 'Playing Negative'. 'Playing Positive', 'Boring', 'Unexciting', 'Negative', 'Non-Political']
+    stringMatchers = ['Playing Entertainment', 'Playing Political', 'Playing Negative', 'Playing Positive', 'Boring', 'Unexciting', 'Negative', 'Non-Political'
+                        'Story', 'Story3', 'Story4', 'Story5', 'Story6', 'Story7', 'Story8']
     forbiddenWords = ['test_ads', 'selected undefined']
     print(fname)
     if fname != '../CNN008_Files\Book1.csv':
