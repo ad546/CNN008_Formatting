@@ -55,7 +55,6 @@ def runScriptMobile(fname, username): #need to adjust dataArray indexes
         cleanFiles(fname, username)
         with open(fname, newline='') as csv_file:
             dataArray = list(csv.reader(csv_file))
-            print(dataArray)
 
         for i in range(len(dataArray)):
             if not any(y in dataArray[i][2] for y in forbiddenWords):
@@ -70,7 +69,7 @@ def runScriptMobile(fname, username): #need to adjust dataArray indexes
 
 def runScriptTV(fname, username):
     cleanData = []
-    stringMatchers = ['started', 'Survey', 'survey', 'selected']
+    stringMatchers = ['Playing Entertainment', 'Playing Political', 'Playing Negative'. 'Playing Positive', 'Boring', 'Unexciting', 'Negative', 'Non-Political']
     forbiddenWords = ['test_ads', 'selected undefined']
     print(fname)
     if fname != '../CNN008_Files\Book1.csv':
@@ -84,6 +83,7 @@ def runScriptTV(fname, username):
                     terribleList = []
                     terribleList.append(dataArray[i][1])
                     terribleList.append(dataArray[i][2])
+                    terribleList.append(dataArray[i][3])
                     cleanData.append(terribleList)
 
         writetoFile(cleanData)
