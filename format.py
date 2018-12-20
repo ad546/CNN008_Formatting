@@ -3,6 +3,7 @@
 #Something is wrong with how the log files are saved. Have to open in excel and save as csv
 #Todo: group results based on stories / further clean selected, started
 #Have to combine PC log files and delete Col D "copy *.csv combine.csv" or whatever name
+#mobile have to delete rotation, and last three columns
 
 import pandas #remember to use 'Anaconda Prompt' to run program and not Windows command
 import os
@@ -20,6 +21,10 @@ def loopFiles(username, condition):
     for fname in glob.glob(path):
         if condition == 'desktop':
             runScriptDesktop(fname, username)
+        elif condition == 'mobile':
+            runScriptMobile(fname, username)
+        elif condition == 'tv':
+            runScriptTV(fname, username)
 
 def runScriptDesktop(fname, username):
     cleanData = []
@@ -41,15 +46,16 @@ def runScriptDesktop(fname, username):
 
         writetoFile(cleanData)
 
-def runScriptMobile(fname, username):
+def runScriptMobile(fname, username): #need to adjust dataArray indexes
     cleanData = []
-    stringMatchers = ['started', 'Survey', 'survey', 'selected']
+    stringMatchers = ['Boring', 'Unexciting', 'Negative', 'Non-Political', 'Selected']
     forbiddenWords = ['test_ads', 'selected undefined']
     print(fname)
     if fname != '../CNN008_Files\Book1.csv':
         cleanFiles(fname, username)
         with open(fname, newline='') as csv_file:
             dataArray = list(csv.reader(csv_file))
+            print(dataArray)
 
         for i in range(len(dataArray)):
             if not any(y in dataArray[i][2] for y in forbiddenWords):
@@ -57,6 +63,7 @@ def runScriptMobile(fname, username):
                     terribleList = []
                     terribleList.append(dataArray[i][1])
                     terribleList.append(dataArray[i][2])
+                    terribleList.append(dataArray[i][3])
                     cleanData.append(terribleList)
 
         writetoFile(cleanData)
@@ -94,5 +101,11 @@ def main():
     condition = input("Please enter the condition: ")
     if condition == 'desktop':
         loopFiles(username, condition)
+    elif condition == 'mobile':
+        loopFiles(username, condition)
+    elif condition == 'tv':
+        loopFiles(username, condition)
+    else:
+        print("No such condition exists")
 
 main()
